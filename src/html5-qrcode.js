@@ -54,7 +54,20 @@
 
                 // Call the getUserMedia method with our callback functions
                 if (navigator.getUserMedia) {
-                    navigator.getUserMedia({video: true}, successCallback, function(error) {
+                    var mediaConstraints = {video: true};
+                    if (MediaStreamTrack !== undefined && MediaStreamTrack.getSources !== undefined) {
+                      MediaStreamTrack.getSources(function(sources) {
+                        var rearCameras = sources.filter(function(source) {
+                          return source.facing === 'environment';
+                        });
+
+                        var rearCameraId = rearCameras[0].id;
+                        mediaConstraints.video = {
+                          deviceId: rearCameraId
+                        };
+                      });
+                    }
+                    navigator.getUserMedia(mediaConstraints, successCallback, function(error) {
                         videoError(error, localMediaStream);
                     });
                 } else {
