@@ -61,6 +61,10 @@
                           return source.facing === 'environment';
                         });
 
+                        if (rearCameras.length === 0) {
+                          return;
+                        }
+
                         var rearCameraId = rearCameras[0].id;
                         mediaConstraints.video = {
                           deviceId: rearCameraId
