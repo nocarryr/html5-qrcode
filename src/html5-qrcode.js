@@ -75,11 +75,9 @@
                         return;
                       }
 
-                      var mediaConstraints = {
-                        video: {
-                          facingMode: 'environment'
-                        }
-                      };
+                      var mediaConstraints = {video: {optional: [
+                        {sourceId: rearCameras[0].id}
+                      ]}};
                       navigator.getUserMedia(mediaConstraints, successCallback, function(error) {
                           videoError(error, localMediaStream);
                       });
