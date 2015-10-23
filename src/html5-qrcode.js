@@ -66,9 +66,7 @@
                         }
 
                         var rearCameraId = rearCameras[0].id;
-                        mediaConstraints.video = {
-                          deviceId: rearCameraId
-                        };
+                        mediaConstraints.video = {facingMode: 'environment'};
                       });
                     }
                     navigator.getUserMedia(mediaConstraints, successCallback, function(error) {
