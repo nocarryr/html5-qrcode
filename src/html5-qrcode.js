@@ -54,24 +54,38 @@
 
                 // Call the getUserMedia method with our callback functions
                 if (navigator.getUserMedia) {
-                    var mediaConstraints = {video: true};
-                    if (MediaStreamTrack !== undefined && MediaStreamTrack.getSources !== undefined) {
-                      MediaStreamTrack.getSources(function(sources) {
-                        var rearCameras = sources.filter(function(source) {
-                          return source.facing === 'environment';
-                        });
-
-                        if (rearCameras.length === 0) {
-                          return;
-                        }
-
-                        var rearCameraId = rearCameras[0].id;
-                        mediaConstraints.video = {facingMode: 'environment'};
+                    if (MediaStreamTrack === undefined || MediaStreamTrack.getSources === undefined) {
+                      var mediaConstraints = {video: true};
+                      navigator.getUserMedia(mediaConstraints, successCallback, function(error) {
+                          videoError(error, localMediaStream);
                       });
+                      return;
                     }
-                    navigator.getUserMedia(mediaConstraints, successCallback, function(error) {
-                        videoError(error, localMediaStream);
+
+                    MediaStreamTrack.getSources(function(sources) {
+                      var rearCameras = sources.filter(function(source) {
+                        return source.facing === 'environment';
+                      });
+
+                      if (rearCameras.length === 0) {
+                        var mediaConstraints = {video: true};
+                        navigator.getUserMedia(mediaConstraints, successCallback, function(error) {
+                            videoError(error, localMediaStream);
+                        });
+                        return;
+                      }
+
+                      var mediaConstraints = {
+                        video: {
+                          facingMode: 'environment'
+                        }
+                      };
+                      navigator.getUserMedia(mediaConstraints, successCallback, function(error) {
+                          videoError(error, localMediaStream);
+                      });
                     });
+                    }
+
                 } else {
                     console.log('Native web camera streaming (getUserMedia) not supported in this browser.');
                     // Display a friendly "sorry" message to the user
