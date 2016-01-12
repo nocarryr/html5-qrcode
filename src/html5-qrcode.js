@@ -47,8 +47,6 @@
                     video.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
                     localMediaStream = stream;
                     $.data(currentElem[0], "stream", stream);
-
-                    video.play();
                     $.data(currentElem[0], "timeout", setTimeout(scan, 1000));
                 };
 
