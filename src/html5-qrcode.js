@@ -24,9 +24,8 @@
                 var localMediaStream;
 
                 var scan = function() {
+                  
                     if (localMediaStream) {
-                        context.drawImage(video, 0, 0, 307, 250);
-
                         try {
                             qrcode.decode();
                         } catch (e) {
@@ -40,12 +39,28 @@
                     }
                 };//end snapshot function
 
+                var updateFrame = function(){
+                    if (currentElem.data('videoPlayState')){
+                        return;
+                    }
+                    if (localMediaStream){
+                        context.drawImage(video, 0, 0, 307, 250);
+                        requestAnimationFrame(updateFrame);
+                    } else {
+                        setTimeout(updateFrame, 500);
+                    }
+                };
+
                 window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
                 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
 
                 var successCallback = function(stream) {
                     video.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
                     localMediaStream = stream;
+
+                    currentElem.data('videoPlayState', true);
+                    updateFrame();
+
                     $.data(currentElem[0], "stream", stream);
                     $.data(currentElem[0], "timeout", setTimeout(scan, 1000));
                 };
@@ -93,6 +108,8 @@
         html5_qrcode_stop: function() {
             return this.each(function() {
                 //stop the stream and cancel timeouts
+                $(this).data('videoPlayState', false);
+
                 $(this).data('stream').getVideoTracks().forEach(function(videoTrack) {
                     videoTrack.stop();
                 });
