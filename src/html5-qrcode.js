@@ -133,17 +133,20 @@
                 qrcode.callback = function (result) {
                     qrcodeSuccess(result, localMediaStream);
                 };
+                return currentElem;
             }); // end of html5_qrcode
         },
         html5_qrcode_stop: function() {
             return this.each(function() {
                 //stop the stream and cancel timeouts
-                $(this).data('overlayElem').remove();
-                $(this).data('stream').getVideoTracks().forEach(function(videoTrack) {
+                var $this = $(this);
+                $this.data('overlayElem').remove();
+                $this.data('stream').getVideoTracks().forEach(function(videoTrack) {
                     videoTrack.stop();
                 });
 
-                clearTimeout($(this).data('timeout'));
+                clearTimeout($this.data('timeout'));
+                return $this;
             });
         }
     });
