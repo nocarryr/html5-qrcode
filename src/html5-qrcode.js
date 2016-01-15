@@ -15,8 +15,18 @@
                     width = 300;
                 }
 
-                var vidElem = $('<video autoplay width="' + width + 'px" height="' + height + 'px"></video>').appendTo(currentElem);
-                var canvasElem = $('<canvas id="qr-canvas" width="' + (width - 2) + 'px" height="' + (height - 2) + 'px" style="display:none;"></canvas>').appendTo(currentElem);
+                var canvasHeight = height - 2;
+                var canvasWidth = width - 2;
+
+                var vidElem = $('<video autoplay></video>')
+                        .attr('width', width)
+                        .attr('height', height)
+                        .appendTo(currentElem);
+                var canvasElem = $('<canvas id="qr-canvas"></canvas>')
+                        .attr('width', canvasWidth)
+                        .attr('height', canvasHeight)
+                        .hide()
+                        .appendTo(currentElem);
 
                 var video = vidElem[0];
                 var canvas = canvasElem[0];
@@ -44,7 +54,7 @@
                         return;
                     }
                     if (localMediaStream){
-                        context.drawImage(video, 0, 0, 307, 250);
+                        context.drawImage(video, 0, 0, canvasWidth, canvasHeight);
                         requestAnimationFrame(updateFrame);
                     } else {
                         setTimeout(updateFrame, 500);
