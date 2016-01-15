@@ -15,7 +15,10 @@
                     width = 300;
                 }
 
-                var canvasScale = 0.5;
+                var canvasScale = currentElem.data('canvasScale');
+                if (typeof(canvasScale) == 'undefined'){
+                    canvasScale = 0.5;
+                }
 
                 var canvasHeight = height * canvasScale;
                 var canvasWidth = width * canvasScale;
