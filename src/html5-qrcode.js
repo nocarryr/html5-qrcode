@@ -31,9 +31,14 @@
                 var canvasCoords = {
                     dx: 0,
                     dy: 0,
-                    w: width * cropFactor,
-                    h: height * cropFactor,
                 };
+                if (width < height){
+                    canvasCoords.w = width * cropFactor;
+                    canvasCoords.h = canvasCoords.w;
+                } else {
+                    canvasCoords.h = height * cropFactor;
+                    canvasCoords.w = canvasCoords.h;
+                }
                 canvasCoords.sx = (width - canvasCoords.w) / 2;
                 canvasCoords.sy = (height - canvasCoords.h) / 2;
 
