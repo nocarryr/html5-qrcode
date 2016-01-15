@@ -15,8 +15,10 @@
                     width = 300;
                 }
 
-                var canvasHeight = height - 2;
-                var canvasWidth = width - 2;
+                var canvasScale = 0.5;
+
+                var canvasHeight = height * canvasScale;
+                var canvasWidth = width * canvasScale;
 
                 var vidElem = $('<video autoplay></video>')
                         .attr('width', width)
