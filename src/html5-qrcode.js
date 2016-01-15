@@ -22,16 +22,16 @@
                     width = 300;
                 }
 
-                var canvasCrop = currentElem.data('canvasCrop')
-                if (typeof(canvasCrop) == 'undefined'){
-                    canvasCrop = 1.0;
+                var cropFactor = currentElem.data('crop-factor')
+                if (typeof(cropFactor) == 'undefined'){
+                    cropFactor = 1.0;
                 }
 
                 var canvasCoords = {
                     dx: 0,
                     dy: 0,
-                    w: width * canvasCrop,
-                    h: height * canvasCrop,
+                    w: width * cropFactor,
+                    h: height * cropFactor,
                 };
                 canvasCoords.sx = (width - canvasCoords.w) / 2;
                 canvasCoords.sy = (height - canvasCoords.h) / 2;
@@ -51,7 +51,7 @@
                         .hide()
                         .appendTo(currentElem);
                 var overlayElem = null;
-                if (canvasCrop !== 1.0){
+                if (cropFactor !== 1.0){
                     overlayElem = $('<div class="qr-overlay"></div>')
                         .css(overlayStyle)
                         .appendTo(currentElem.offsetParent());
