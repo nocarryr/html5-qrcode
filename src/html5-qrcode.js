@@ -141,9 +141,11 @@
                 //stop the stream and cancel timeouts
                 var $this = $(this);
                 $this.data('overlayElem').remove();
-                $this.data('stream').getVideoTracks().forEach(function(videoTrack) {
-                    videoTrack.stop();
-                });
+                if (typeof($this.data('stream')) != 'undefined'){
+                    $this.data('stream').getVideoTracks().forEach(function(videoTrack) {
+                        videoTrack.stop();
+                    });
+                }
 
                 clearTimeout($this.data('timeout'));
                 return $this;
