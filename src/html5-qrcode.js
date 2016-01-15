@@ -15,21 +15,27 @@
                     width = 300;
                 }
 
-                var canvasScale = currentElem.data('canvasScale');
-                if (typeof(canvasScale) == 'undefined'){
-                    canvasScale = 0.5;
+                var canvasCrop = currentElem.data('canvasCrop')
+                if (typeof(canvasCrop) == 'undefined'){
+                    canvasCrop = 0.5;
                 }
 
-                var canvasHeight = height * canvasScale;
-                var canvasWidth = width * canvasScale;
+                var canvasCoords = {
+                    dx: 0,
+                    dy: 0,
+                    w: width * canvasCrop,
+                    h: height * canvasCrop,
+                };
+                canvasCoords.sx = (width - canvasCoords.w) / 2;
+                canvasCoords.sy = (height - canvasCoords.h) / 2;
 
                 var vidElem = $('<video autoplay></video>')
                         .attr('width', width)
                         .attr('height', height)
                         .appendTo(currentElem);
                 var canvasElem = $('<canvas id="qr-canvas"></canvas>')
-                        .attr('width', canvasWidth)
-                        .attr('height', canvasHeight)
+                        .attr('width', canvasCoords.dWidth)
+                        .attr('height', canvasCoords.dHeight)
                         .hide()
                         .appendTo(currentElem);
 
@@ -41,7 +47,10 @@
                 var scan = function() {
 
                     if (localMediaStream) {
-                        context.drawImage(video, 0, 0, canvasWidth, canvasHeight);
+                        context.drawImage(video, canvasCoords.sx, canvasCoords.sy,
+                            canvasCoords.w, canvasCoords.h,
+                            canvasCoords.dx, canvasCoords.dy,
+                            canvasCoords.w, canvasCoords.h);
 
                         try {
                             qrcode.decode();
