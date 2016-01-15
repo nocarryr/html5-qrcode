@@ -3,7 +3,8 @@
       'position': 'absolute',
       'background-color': 'transparent',
       'border-style': 'solid',
-      'border-color': 'rgba(0, 0, 0, 0.5)',
+      'border-color': 'rgba(255, 255, 0, 0.5)',
+      'border-width': '1px',
       'z-index': '20',
     };
     jQuery.fn.extend({
