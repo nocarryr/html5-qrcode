@@ -1,4 +1,11 @@
 (function($) {
+    var overlayStyle = {
+      'position': 'absolute',
+      'background-color': 'transparent',
+      'border-style': 'solid',
+      'border-color': 'rgba(0, 0, 0, 0.5)',
+      'z-index': '20',
+    };
     jQuery.fn.extend({
         html5_qrcode: function(qrcodeSuccess, qrcodeError, videoError) {
             return this.each(function() {
@@ -29,6 +36,11 @@
                 canvasCoords.sx = (width - canvasCoords.w) / 2;
                 canvasCoords.sy = (height - canvasCoords.h) / 2;
 
+                overlayStyle.left = canvasCoords.sx + currentElem.offset().left;
+                overlayStyle.top = canvasCoords.sy + currentElem.offset().top;
+                overlayStyle.width = canvasCoords.w;
+                overlayStyle.height = canvasCoords.h;
+
                 var vidElem = $('<video autoplay></video>')
                         .attr('width', width)
                         .attr('height', height)
@@ -38,6 +50,9 @@
                         .attr('height', canvasCoords.dHeight)
                         .hide()
                         .appendTo(currentElem);
+                var overlayElem = $('<div class="qr-overlay"></div>')
+                        .css(overlayStyle)
+                        .appendTo(currentElem.offsetParent());
 
                 var video = vidElem[0];
                 var canvas = canvasElem[0];
