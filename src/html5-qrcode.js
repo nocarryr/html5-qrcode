@@ -1,4 +1,11 @@
 (function($) {
+    var overlayStyle = {
+      'position': 'absolute',
+      'background-color': 'transparent',
+      'border-style': 'solid',
+      'border-color': 'rgba(0, 0, 0, 0.5)',
+      'z-index': '20',
+    };
     jQuery.fn.extend({
         html5_qrcode: function(qrcodeSuccess, qrcodeError, videoError) {
             return this.each(function() {
@@ -15,8 +22,40 @@
                     width = 300;
                 }
 
-                var vidElem = $('<video autoplay width="' + width + 'px" height="' + height + 'px"></video>').appendTo(currentElem);
-                var canvasElem = $('<canvas id="qr-canvas" width="' + (width - 2) + 'px" height="' + (height - 2) + 'px" style="display:none;"></canvas>').appendTo(currentElem);
+                var cropFactor = currentElem.data('crop-factor')
+                if (typeof(cropFactor) == 'undefined'){
+                    cropFactor = 1.0;
+                }
+
+                var canvasCoords = {
+                    dx: 0,
+                    dy: 0,
+                    w: width * cropFactor,
+                    h: height * cropFactor,
+                };
+                canvasCoords.sx = (width - canvasCoords.w) / 2;
+                canvasCoords.sy = (height - canvasCoords.h) / 2;
+
+                overlayStyle.left = canvasCoords.sx + currentElem.offset().left;
+                overlayStyle.top = canvasCoords.sy + currentElem.offset().top;
+                overlayStyle.width = canvasCoords.w;
+                overlayStyle.height = canvasCoords.h;
+
+                var vidElem = $('<video autoplay></video>')
+                        .attr('width', width)
+                        .attr('height', height)
+                        .appendTo(currentElem);
+                var canvasElem = $('<canvas id="qr-canvas"></canvas>')
+                        .attr('width', canvasCoords.dWidth)
+                        .attr('height', canvasCoords.dHeight)
+                        .hide()
+                        .appendTo(currentElem);
+                var overlayElem = null;
+                if (cropFactor !== 1.0){
+                    overlayElem = $('<div class="qr-overlay"></div>')
+                        .css(overlayStyle)
+                        .appendTo(currentElem.offsetParent());
+                }
 
                 var video = vidElem[0];
                 var canvas = canvasElem[0];
@@ -24,8 +63,12 @@
                 var localMediaStream;
 
                 var scan = function() {
+
                     if (localMediaStream) {
-                        context.drawImage(video, 0, 0, 307, 250);
+                        context.drawImage(video, canvasCoords.sx, canvasCoords.sy,
+                            canvasCoords.w, canvasCoords.h,
+                            canvasCoords.dx, canvasCoords.dy,
+                            canvasCoords.w, canvasCoords.h);
 
                         try {
                             qrcode.decode();
