@@ -24,7 +24,7 @@
 
                 var canvasCrop = currentElem.data('canvasCrop')
                 if (typeof(canvasCrop) == 'undefined'){
-                    canvasCrop = 0.5;
+                    canvasCrop = 1.0;
                 }
 
                 var canvasCoords = {
@@ -50,9 +50,12 @@
                         .attr('height', canvasCoords.dHeight)
                         .hide()
                         .appendTo(currentElem);
-                var overlayElem = $('<div class="qr-overlay"></div>')
+                var overlayElem = null;
+                if (canvasCrop !== 1.0){
+                    overlayElem = $('<div class="qr-overlay"></div>')
                         .css(overlayStyle)
                         .appendTo(currentElem.offsetParent());
+                }
 
                 var video = vidElem[0];
                 var canvas = canvasElem[0];
