@@ -43,6 +43,15 @@ Then call the ```html5_qrcode``` function on the ```div```.
 );
 ```
 
+A cropped window can be added which will decrease the scanned area (improving performance).
+If used, a box showing the scan area will be added as an overylay to the video display.
+This is done by setting the `crop-factor` data attribute.
+
+In this example, setting `data-crop-factor="0.5"` will crop by 50%:
+```
+<div id="reader" data-crop-factor="0.5"></div>
+```
+
 It takes three callbacks: a ```readSuccess```, ```readError```, and ```videoLoadError```. The readError wil be called quite often, it is really only useful for debugging. 
 
 ```videoError``` is called if the HTML5 video stream cannot be opened.
