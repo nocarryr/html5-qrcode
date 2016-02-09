@@ -52,8 +52,8 @@
                         .attr('height', height)
                         .appendTo(currentElem);
                 var canvasElem = $('<canvas id="qr-canvas"></canvas>')
-                        .attr('width', canvasCoords.dWidth)
-                        .attr('height', canvasCoords.dHeight)
+                        .attr('width', canvasCoords.w)
+                        .attr('height', canvasCoords.h)
                         .hide()
                         .appendTo(currentElem);
                 var overlayElem = $();
@@ -72,8 +72,14 @@
                 var scan = function() {
 
                     if (localMediaStream) {
+                        if (typeof(canvasCoords.sWidth) == 'undefined'){
+                            canvasCoords.sx = (video.width - canvasCoords.w) / 2;
+                            canvasCoords.sy = (video.height - canvasCoords.h) / 2;
+                            canvasCoords.sWidth = video.width;
+                            canvasCoords.sHeight = video.height;
+                        }
                         context.drawImage(video, canvasCoords.sx, canvasCoords.sy,
-                            canvasCoords.w, canvasCoords.h,
+                            canvasCoords.sWidth, canvasCoords.sHeight,
                             canvasCoords.dx, canvasCoords.dy,
                             canvasCoords.w, canvasCoords.h);
 
